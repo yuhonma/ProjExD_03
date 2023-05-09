@@ -168,9 +168,31 @@ class Explosion:
     def update(self,screen: pg.Surface,time: int):
         """
         爆発の演出
+        引数 screen：画像Surface
         """
         self._img = self._imgs[time%4]
         screen.blit(self._img, self._rct)
+
+
+class Score:
+    """
+    スコア表示に関するクラス
+    """
+    def __init__(self):
+        """
+        スコア表示に関する変数の初期化
+        """
+        self._font = pg.font.Font(None, 80)
+        self._score = 0 # 爆発させた回数の変数
+    
+    def update(self,screen: pg.Surface):
+        """
+        スコア表示の演出
+        引数 screen：画像Surface
+        """
+        self._txt = self._font.render(str(self._score), True, (0,0,0))
+        screen.blit(self._txt, [150, 100]) # 150,100の座標にテキストを表示
+        
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -182,6 +204,7 @@ def main():
     bombs = [Bomb() for _ in range(NUM_OF_BOMBS)]
     beam = None
     exp = None
+    score = Score()
 
     tmr = 0
     while True:
@@ -210,6 +233,7 @@ def main():
             beam.update(screen)
             for i,bomb in enumerate(bombs):
                 if beam._rct.colliderect(bomb._rct):
+                    score._score += 1
                     beam = None
                     exp = Explosion(bombs[i])
                     del bombs[i]
@@ -220,6 +244,7 @@ def main():
             exp.update(screen,tmr)
             exp._life -= 1
 
+        score.update(screen) # スコアの表示
         pg.display.update()
         clock.tick(1000)
 
