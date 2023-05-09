@@ -182,7 +182,7 @@ class Score:
         """
         スコア表示に関する変数の初期化
         """
-        self._font = pg.font.Font(None, 80)
+        self._font = pg.font.Font(None, 120)
         self._score = 0 # 爆発させた回数の変数
     
     def update(self,screen: pg.Surface):
