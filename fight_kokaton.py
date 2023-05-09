@@ -192,6 +192,27 @@ class Score:
         """
         self._txt = self._font.render(str(self._score), True, (0,0,0))
         screen.blit(self._txt, [150, 100]) # 150,100の座標にテキストを表示
+
+
+class Gameover:
+    """
+    ゲームオーバー時のテキスト表示に関するクラス
+    """
+    def __init__(self):
+        """
+        ゲームオーバー表示に関する変数の初期化
+        """
+        self._font = pg.font.Font(None, 200)
+        self._txt = self._font.render("GAME OVER", True, (255,0,0)) # テキスト変数
+        self._rct = self._txt.get_rect(center=(WIDTH//2, HEIGHT//2)) # 座標は中央寄せに設定
+
+    
+    def display(self,screen: pg.Surface):
+        """
+        ゲームオーバー時に呼び出される関数
+        引数 screen：画像Surface
+        """
+        screen.blit(self._txt, self._rct)
         
 
 def main():
@@ -205,6 +226,7 @@ def main():
     beam = None
     exp = None
     score = Score()
+    gameover = Gameover()
 
     tmr = 0
     while True:
@@ -221,6 +243,7 @@ def main():
             bomb.update(screen)
             if bird._rct.colliderect(bomb._rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
+                gameover.display(screen)
                 bird.change_img(8, screen)
                 pg.display.update()
                 time.sleep(1)
